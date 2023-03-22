@@ -103,34 +103,36 @@ struct Node
 
 class Solution{
     public:
+    int height(struct Node* node){
+        // code here 
+        if(node==NULL)
+        return 0;
+        
+        int left=height(node->left);
+        int right=height(node->right);
+        
+        int ans=max(left,right)+1;
+        return ans;
+    }
     //Function to check whether a binary tree is balanced or not.
-    pair<bool,int> isBalancedfast(Node *root)
+    bool isBalanced(Node *root)
     {
         //  Your Code here
         if(root==NULL){
-            pair<bool,int> p=make_pair(true,0);
-            return p;
+            return true;
         }
-        pair<bool,int> leftans=isBalancedfast(root->left);
-        pair<bool,int> rightans=isBalancedfast(root->right);
+        bool leftans=isBalanced(root->left);
+        bool rightans=isBalanced(root->right);
         
-        bool diff=abs(leftans.second -rightans.second )<=1;
+        bool diff=abs(height(root->left)-height(root->right))<=1;
         
-        pair<bool,int> ans;
-        ans.second=max(leftans.second,rightans.second)+1;
-        
-        if(leftans.first && rightans.first && diff){
-            ans.first= true;
-            return ans;
+        if(leftans && rightans && diff){
+            return true;
         }
         else
         {
-            ans.first= false;
-            return ans;
+            return false;
         }
-    }
-    bool isBalanced(Node *root){
-        return isBalancedfast(root).first;
     }
 };
 
