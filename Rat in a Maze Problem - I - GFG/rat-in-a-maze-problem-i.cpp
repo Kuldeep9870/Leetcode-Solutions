@@ -9,87 +9,58 @@ using namespace std;
 // User function template for C++
 
 class Solution{
-    private:
-    bool isSafe(vector<vector<int>> &m, int n,int x,int y,vector<vector<int>> visited)
-    {
-        if((x>=0 && x<n)&&(y>=0 && y<n)&& visited[x][y]==0 && m[x][y]==1)
+    public:
+    bool isSafe(int x,int y,int n,vector<vector<int>> &m,vector<vector<bool>>& vis){
+        if((x>=0&& x<n)&& (y>=0 && y<n)&& vis[x][y]==0&& m[x][y]==1)
         return true;
         else
         return false;
     }
-    void solve(vector<vector<int>> &m, int n,int x,int y,string path,vector<vector<int>> visited,
-        vector<string> &ans)
-        {
-            if(x==n-1 && y==n-1)
-            {
-                ans.push_back(path);
-                return;
-            }
-            visited[x][y]=1;
-            
-            //choice D U L R
-            //down
-            int newx=x+1;
-            int newy=y;
-            if(isSafe(m,n,newx,newy,visited))
-            {
-                path.push_back('D');
-                solve(m,n,newx,newy,path,visited,ans);
-                path.pop_back();
-            }
-            //UP
-            newx=x-1;
-            newy=y;
-            if(isSafe(m,n,newx,newy,visited))
-            {
-                path.push_back('U');
-                solve(m,n,newx,newy,path,visited,ans);
-                path.pop_back();
-            }
-            //LEFT
-            newx=x;
-            newy=y-1;
-            if(isSafe(m,n,newx,newy,visited))
-            {
-                path.push_back('L');
-                solve(m,n,newx,newy,path,visited,ans);
-                path.pop_back();
-            }
-            //RIGHT
-            newx=x;
-            newy=y+1;
-            if(isSafe(m,n,newx,newy,visited))
-            {
-                path.push_back('R');
-                solve(m,n,newx,newy,path,visited,ans);
-                path.pop_back();
-            }
-            visited[x][y]=0;
+    void solve(int x,int y,int n,vector<vector<int>> &m,vector<string>& ans,vector<vector<bool>>& vis,string path){
+        //base case
+        if(x==n-1 && y==n-1){
+            ans.push_back(path);
+            return;
         }
-    public:
+        
+        //lexical order---> D L R U
+        //DOWN
+        if(isSafe(x+1,y,n,m,vis)){
+            vis[x][y]=1;
+            solve(x+1,y,n,m,ans,vis,path+'D');
+            vis[x][y]=0;
+        }
+        //LEFT
+        if(isSafe(x,y-1,n,m,vis)){
+            vis[x][y]=1;
+            solve(x,y-1,n,m,ans,vis,path+'L');
+            vis[x][y]=0;
+        }
+        //right
+        if(isSafe(x,y+1,n,m,vis)){
+            vis[x][y]=1;
+            solve(x,y+1,n,m,ans,vis,path+'R');
+            vis[x][y]=0;
+        }
+        //UP
+        if(isSafe(x-1,y,n,m,vis)){
+            vis[x][y]=1;
+            solve(x-1,y,n,m,ans,vis,path+'U');
+            vis[x][y]=0;
+        }
+    }
     vector<string> findPath(vector<vector<int>> &m, int n) {
         // Your code goes here
-        string path="";
+        vector<vector<bool>> vis(n,vector<bool>(n,0));
         vector<string> ans;
+        string path;
+        
         if(m[0][0]==0)
         return ans;
-        int srcx=0;
-        int srcy=0;
         
-        vector<vector<int>> visited=m;
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<n;j++)
-            {
-                visited[i][j]=0;
-            }
-        }
-        
-        solve(m,n,srcx,srcy,path,visited,ans);
-        sort(ans.begin(),ans.end());
+        solve(0,0,n,m,ans,vis,path);
         
         return ans;
-        
     }
 };
 
