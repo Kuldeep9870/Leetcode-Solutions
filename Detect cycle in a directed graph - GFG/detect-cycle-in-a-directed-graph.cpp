@@ -29,7 +29,7 @@ class Solution {
         unordered_map<int,bool> visited;
         unordered_map<int,bool> DFSvisited;
     
-      //call for dfs
+      //call for dfs for all components
       for(int i=0;i<V;i++){
         if(!visited[i]){
           bool cyclefound=checkcycleDFS(i,adj,visited,DFSvisited);
