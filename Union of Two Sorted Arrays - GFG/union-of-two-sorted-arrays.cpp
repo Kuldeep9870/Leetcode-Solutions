@@ -14,21 +14,34 @@ class Solution{
         //Your code here
         //return vector with correct order of elements
         vector<int> ans;
-        set<int> tmp;
-        for(int i=0;i<n;i++)
-        {
-            tmp.insert(arr1[i]);
+        int i=0,j=0;
+        while(i<n && j<m){
+            if(arr1[i]<=arr2[j]){
+                if(ans.size()==0  || ans.back()!=arr1[i]){
+                    ans.push_back(arr1[i]);
+                }
+                i++;
+            }
+            else{
+                if(ans.size()==0  || ans.back()!=arr2[j]){
+                    ans.push_back(arr2[j]);
+                }
+                j++;
+            }
         }
-        for(int i=0;i<m;i++)
-        {
-            tmp.insert(arr2[i]);
+        while(i<n){
+            if(ans.back()!=arr1[i]){
+                    ans.push_back(arr1[i]);
+                }
+            i++;
         }
-        for(auto i:tmp)
-        {
-            ans.push_back(i);
+        while(j<m){
+            if(ans.back()!=arr2[j]){
+                    ans.push_back(arr2[j]);
+                }
+            j++;
         }
         return ans;
-        
     }
 };
 
